@@ -31,6 +31,13 @@ export async function GET(request: Request): Promise<NextResponse<WidgetResponse
 
   const totalLikes = await fetchLikes(profile)
 
+  const cacheHeaders = {
+    'Cache-Control': 'public, max-age=86400, s-maxage=86400', // 24 hours in seconds
+    'CDN-Cache-Control': 'public, max-age=86400', // For CDN caching
+    'Surrogate-Control': 'public, max-age=86400', // For reverse proxy caching
+    'stale-while-revalidate': '43200', // Allow serving stale content for 12 hours while revalidating
+  }
+
   if (format === 'svg') {
     const colors = {
       light: {
@@ -54,7 +61,7 @@ export async function GET(request: Request): Promise<NextResponse<WidgetResponse
     return new NextResponse(svg, {
       headers: {
         'Content-Type': 'image/svg+xml',
-        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        ...cacheHeaders,
       },
     })
   }
@@ -65,9 +72,7 @@ export async function GET(request: Request): Promise<NextResponse<WidgetResponse
       likes: totalLikes,
     },
     {
-      headers: {
-        'Cache-Control': 'no-cache, no-store, must-revalidate',
-      },
+      headers: cacheHeaders,
     },
   )
 }
