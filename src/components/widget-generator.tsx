@@ -1,7 +1,7 @@
 'use client'
 
 import type {ProfileValidationResult, WidgetCodeResult} from '@/lib/types'
-import {Copy, AlertCircle, Check} from 'lucide-react'
+import {AlertCircle} from 'lucide-react'
 
 import {useState} from 'react'
 import {useSearchParams, useRouter} from 'next/navigation'
@@ -14,7 +14,6 @@ import {Input} from '@/components/ui/input'
 import {Label} from '@/components/ui/label'
 import {Alert, AlertDescription} from '@/components/ui/alert'
 import {Card, CardContent, CardFooter, CardHeader, CardTitle} from '@/components/ui/card'
-import {Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs'
 import {WidgetPreview} from '@/components/widget-preview'
 
 type FormValues = {

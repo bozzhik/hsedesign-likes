@@ -27,13 +27,13 @@ export function WidgetPreview({validatedData, generatedCode, activeTab, copied, 
             <h3 className="text-sm font-medium">Preview:</h3>
             <div className="p-4 border rounded-md flex items-center justify-center">
               <a href={`https://hsedesign.ru/designer/${validatedData.profile}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center text-sm font-medium hover:opacity-90 transition-opacity">
-                ❤️ {validatedData.likesCount}
+                ❤️ {validatedData.error ? '—' : validatedData.likesCount ?? 'undefined'}
               </a>
             </div>
           </div>
         </div>
 
-        <Tabs defaultValue="html" onValueChange={(value) => onTabChange(value as 'html' | 'markdown')}>
+        <Tabs value={activeTab} onValueChange={(value) => onTabChange(value as 'html' | 'markdown')}>
           <TabsList className="mb-4">
             <TabsTrigger value="html">HTML</TabsTrigger>
             <TabsTrigger value="markdown">Markdown</TabsTrigger>
