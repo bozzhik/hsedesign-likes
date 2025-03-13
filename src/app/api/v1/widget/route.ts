@@ -1,5 +1,5 @@
 import {NextResponse} from 'next/server'
-import {fetchLikes} from '@api/v1/fetch-likes'
+import {fetchLikes} from '@api/v1/widget/fetch-likes'
 
 export type WidgetResponse = {
   profile: string | null
