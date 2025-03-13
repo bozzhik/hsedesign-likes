@@ -1,13 +1,20 @@
 import puppeteer from 'puppeteer'
+import chromium from '@sparticuz/chromium'
 
 export async function fetchLikes(profile: string): Promise<number> {
+  const isProduction = process.env.NODE_ENV === 'production'
+
   const browser = await puppeteer.launch({
-    headless: true,
-    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    args: chromium.args,
+    defaultViewport: chromium.defaultViewport,
+    executablePath: isProduction ? await chromium.executablePath() : undefined,
+    headless: chromium.headless,
+    ignoreDefaultArgs: false,
   })
 
   try {
     const page = await browser.newPage()
+    await page.setJavaScriptEnabled(true)
 
     await page.setViewport({width: 1280, height: 800})
     await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36')

@@ -1,7 +1,11 @@
 import type {NextConfig} from 'next'
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  serverRuntimeConfig: {
+    chromium: {
+      headless: true,
+    },
+  },
 }
 
 export default nextConfig
