@@ -4,7 +4,7 @@ import type {ProfileValidationResult, WidgetCodeResult} from '@/lib/types'
 import type {WidgetResponse} from '@api/v1/widget/route'
 import {AlertCircle, Loader2} from 'lucide-react'
 
-import {useState} from 'react'
+import {useState, Suspense} from 'react'
 import {useSearchParams, useRouter} from 'next/navigation'
 import axios from 'axios'
 import {useForm} from 'react-hook-form'
@@ -28,7 +28,7 @@ type WidgetState = {
   copied: boolean
 }
 
-export function WidgetGenerator() {
+function WidgetGeneratorContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const initialProfile = searchParams.get('profile') || ''
@@ -167,5 +167,21 @@ export function WidgetGenerator() {
         </pre>
       )} */}
     </div>
+  )
+}
+
+export function WidgetGenerator() {
+  return (
+    <Suspense
+      fallback={
+        <Card>
+          <CardContent className="grid place-items-center p-6">
+            <Loader2 className="size-8 animate-spin" />
+          </CardContent>
+        </Card>
+      }
+    >
+      <WidgetGeneratorContent />
+    </Suspense>
   )
 }
