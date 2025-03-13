@@ -9,8 +9,8 @@ const manrope = Manrope({
 })
 
 export const metadata: Metadata = {
-  title: 'hsedesign.ru likes widget',
-  description: 'An interactive likes widget for hsedesign.ru to highlight your portfolio and attract more attention.',
+  title: 'HSE Design Likes Widget Generator',
+  description: 'Create an embeddable likes widget for hsedesign.ru to highlight your portfolio and attract more attention.',
 }
 
 export default function RootLayout({
