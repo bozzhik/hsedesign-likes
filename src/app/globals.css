@@ -73,4 +73,12 @@
   button {
     @apply outline-none;
   }
+  [data-element='code'] pre {
+    &::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    scrollbar-width: thin;
+    scrollbar-color: oklch(0.922 0 0) oklch(0.97 0 0); /* thumb and track colors */
+  }
 }

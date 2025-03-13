@@ -139,45 +139,7 @@ export function WidgetGenerator() {
         </CardFooter>
       </Card>
 
-      {widgetState.validatedData && widgetState.generatedCode && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Your Widget</CardTitle>
-          </CardHeader>
-
-          <CardContent>
-            <div className="mb-4">
-              <WidgetPreview profile={widgetState.validatedData.profile} likesCount={widgetState.validatedData.likesCount || 0} />
-            </div>
-
-            <Tabs defaultValue="html" onValueChange={(value) => setWidgetState((prev) => ({...prev, activeTab: value as 'html' | 'markdown'}))}>
-              <TabsList className="mb-4">
-                <TabsTrigger value="html">HTML</TabsTrigger>
-                <TabsTrigger value="markdown">Markdown</TabsTrigger>
-              </TabsList>
-
-              <TabsContent value="html" className="mt-0">
-                <div className="relative">
-                  <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto text-sm">{widgetState.generatedCode.html}</pre>
-                </div>
-              </TabsContent>
-
-              <TabsContent value="markdown" className="mt-0">
-                <div className="relative">
-                  <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto text-sm">{widgetState.generatedCode.markdown}</pre>
-                </div>
-              </TabsContent>
-            </Tabs>
-          </CardContent>
-
-          <CardFooter>
-            <Button onClick={copyToClipboard} className="flex items-center gap-2">
-              {widgetState.copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-              {widgetState.copied ? 'Copied!' : 'Copy to Clipboard'}
-            </Button>
-          </CardFooter>
-        </Card>
-      )}
+      {widgetState.validatedData && widgetState.generatedCode && <WidgetPreview validatedData={widgetState.validatedData} generatedCode={widgetState.generatedCode} activeTab={widgetState.activeTab} copied={widgetState.copied} onTabChange={(value) => setWidgetState((prev) => ({...prev, activeTab: value}))} onCopy={copyToClipboard} />}
     </div>
   )
 }
