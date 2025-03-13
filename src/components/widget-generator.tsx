@@ -1,12 +1,13 @@
 'use client'
 
 import type {ProfileValidationResult, WidgetCodeResult} from '@/lib/types'
-import {AlertCircle} from 'lucide-react'
+import type {WidgetResponse} from '@api/v1/widget/route'
+import {AlertCircle, Loader2} from 'lucide-react'
 
 import {useState} from 'react'
 import {useSearchParams, useRouter} from 'next/navigation'
+import axios from 'axios'
 import {useForm} from 'react-hook-form'
-import {validateProfile} from '@/lib/validate-profile'
 import {generateWidgetCode} from '@/lib/generate-code'
 
 import {Button} from '@/components/ui/button'
@@ -58,14 +59,17 @@ export function WidgetGenerator() {
       const formData = new FormData()
       formData.append('profile', data.profile)
 
-      // Validate profile
-      const result = await validateProfile(formData)
+      const result = await axios.get<WidgetResponse>(`/api/v1/widget?profile=${data.profile}`).then((response) => ({
+        exists: !response.data.error,
+        profile: response.data.profile || '',
+        likesCount: response.data.likes || 0,
+        error: response.data.error,
+      }))
 
       if (!result.exists) {
         throw new Error(result.error || 'Invalid profile ID')
       }
 
-      // Generate widget code
       const codeResult = await generateWidgetCode(formData)
       if (!codeResult) {
         throw new Error('Failed to generate widget code')
@@ -138,7 +142,30 @@ export function WidgetGenerator() {
         </CardFooter>
       </Card>
 
-      {widgetState.validatedData && widgetState.generatedCode && <WidgetPreview validatedData={widgetState.validatedData} generatedCode={widgetState.generatedCode} activeTab={widgetState.activeTab} copied={widgetState.copied} onTabChange={(value) => setWidgetState((prev) => ({...prev, activeTab: value}))} onCopy={copyToClipboard} />}
+      {isSubmitting ? (
+        <Card>
+          <CardContent className="grid place-items-center">
+            <Loader2 className="size-8 animate-spin" />
+          </CardContent>
+        </Card>
+      ) : (
+        widgetState.validatedData && widgetState.generatedCode && <WidgetPreview validatedData={widgetState.validatedData} generatedCode={widgetState.generatedCode} activeTab={widgetState.activeTab} copied={widgetState.copied} onTabChange={(value) => setWidgetState((prev) => ({...prev, activeTab: value}))} onCopy={copyToClipboard} />
+      )}
+
+      {/* {widgetState.validatedData && widgetState.generatedCode && (
+        <pre>
+          {JSON.stringify(
+            {
+              validatedData: widgetState.validatedData,
+              generatedCode: widgetState.generatedCode,
+              activeTab: widgetState.activeTab,
+              copied: widgetState.copied,
+            },
+            null,
+            2,
+          )}
+        </pre>
+      )} */}
     </div>
   )
 }
